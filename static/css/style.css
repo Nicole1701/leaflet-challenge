@@ -8,3 +8,56 @@ body,
 html {
   height: 100%;
 }
+
+/* Legend*/
+.legend {
+  padding: 8px 8px;
+  font-family: Sanchez, serif;
+  font-size: 18px;
+  font-weight: 800;
+  background-color: white;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+  border-radius: 3px;
+  line-height: 24px;
+  color: black;
+}
+
+.legend i {
+  width: 30px;
+  height: 15px;
+  float: left;
+  margin: 0 8px 0 0;
+  opacity: 0.9;
+}
+
+.d01 {
+  border-style: solid;
+  border-color: black;
+  background-color: #800026;
+}
+.d02 {
+  border-style: solid;
+  border-color: black;
+  background-color: #bd0026;
+}
+.d03 {
+  border-style: solid;
+  border-color: black;
+  background-color: #e31a1c;
+}
+.d04 {
+  border-style: solid;
+  border-color: black;
+  background-color: #fc4e2a;
+}
+.d05 {
+  border-style: solid;
+  border-color: black;
+  background-color: #fd8d3c;
+}
+
+.d06 {
+  border-style: solid;
+  border-color: black;
+  background-color: #feb24c;
+}

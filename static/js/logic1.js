@@ -77,55 +77,49 @@ function createMap(earthquakes) {
     layers: [streetmap, earthquakes]
   });
 
-  // Create a layer control
-  // Pass in our baseMaps and overlayMaps
   // Add the layer control to the map
   L.control.layers(baseMaps, overlayMaps, {
     collapsed: false
   }).addTo(myMap);
 
-  // Create a legend
-// gis.stackexchange.com/questions/193161/add-legend-to-leaflet-map
+  // Add a legend to the map
+  // stackoverflow.com/questions/45518547/cant-get-leaflet-legend-to-display-properly
 var legend = L.control({ position: "bottomright" });
 
-  // Add information to the legend
-  legend.onAdd = function(myMap) {
-    var div = L.DomUtil.create("div", "info legend");
-    var magRange = [0, 1, 2, 3, 4, 5];
-    var labels = ['<strong> Earthquake Magnitude </strong>'];
- 
-    // Loop through the intervals and generate a label 
-    // with a colored circle for each interval
-    for (var i = 0; i < magRange.length; i++) {
-     labels.push(
-      '<i class="circle" style="background:' + markerColor(magRange[i]) + '"></i> ' +
-      magRange[i] + (magRange[i+1] ? '&ndash;' + magRange[i+1] : '+'));
-      }  //ends for loop
-      div.innerHTML = labels.join('<br>');
-      return div;
-
-  };  // ends legend.onAdd
+legend.onAdd = function(){
+    var div = L.DomUtil.create("div","legend");
+    div.innerHTML = [
+      "<i class='d01'; ></i><span>-9-10</span><br>",
+      "<i class='d02' style = 'height=25px';></i><span>11-30</span><br>",
+      "<i class='d03' style = 'height=25px';></i><span>31-50</span><br>",
+      "<i class='d04' style = 'height=25px';></i><span>51-70</span><br>",
+      "<i class='d05' style = 'height=25px';></i><span>71-90</span><br>",
+      "<i class='d06' style = 'height=25px';></i><span>90+</span><br>"
+      ].join("");
+    return div;
 }
+legend.addTo(myMap); 
 
-// Function that will determine the color the circles based on magnitude
+}
+// Function that will determine the color the circles based on depth
 function markerColor(depth) {
   if (depth > 90) {
-    return '#b30024'
-} else if (depth > 70) {
-    return '#e3191c'
-} else if (depth > 50) {
-    return '#fc4e29'
-} else if (depth > 30) {
-    return '#fd8d3c'
-} else if (depth > 10) {
-    return '#feb14c'
-} 
-else {
-    return '#fed976'
-}
-}
-
-//Create radius function
+      return '#800026'
+  } else if (depth > 70) {
+      return '#BD0026'
+  } else if (depth > 50) {
+      return '#E31A1C'
+  } else if (depth > 30) {
+      return '#FC4E2A'
+  } else if (depth > 10) {
+      return '#FD8D3C'
+  } else if (depth > -9) {
+    return '#FEB24C'
+}  else {
+      return 'magenta'
+  }
+};
+// Function that will determine radius based on magnitutde
 function markerRadius(magnitude) {
   return magnitude * 20000;
 };
