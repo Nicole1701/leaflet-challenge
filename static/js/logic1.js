@@ -16,22 +16,20 @@ function createFeatures(earthquakeData) {
   // Define a function we want to run once for each feature in the features array
   // Give each feature a popup describing the place and time of the earthquake
   function onEachFeature(feature, layer) {
-    layer.bindPopup("<h3>Magnitude: " + feature.properties.mag +"</h3><h3>Location: "+ feature.properties.place +
-    "</h3><hr><p>" + new Date(feature.properties.time) + "</p>");
+    layer.bindPopup("Magnitude: " + feature.properties.mag +
+    "<br />Location: "+ feature.properties.place +
+    "<br />Depth: " + feature.geometry.coordinates[2] + "</p>");
   }
 
   // Create a GeoJSON layer containing the features array on the earthquakeData object
   // Run the onEachFeature function once for each piece of data in the array
+
   let earthquakes = L.geoJSON(earthquakeData, {
     onEachFeature: onEachFeature,
-  });
-
-  let mags = L.geoJSON(earthquakeData, {
-    onEachFeature: onEachFeature,
     pointToLayer: (feature, latlng) => {
-      return new L.Circle(latlng, {
-        radius: feature.properties.mag*20000,
-        fillColor: chooseColor(feature.properties.mag),
+      return new L.circle(latlng,
+        {radius: markerRadius(feature.properties.mag),
+        fillColor: markerColor(feature.properties.mag),
         fillOpacity: .5,
         color: "black",
         stroke: true,
@@ -41,10 +39,10 @@ function createFeatures(earthquakeData) {
   });
 
   // Sending our earthquakes layer to the createMap function
-  createMap(earthquakes, mags);
+  createMap(earthquakes);
 }
 
-function createMap(earthquakes, mags) {
+function createMap(earthquakes) {
 
   // Define streetmap and darkmap layers
   let streetmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
@@ -71,8 +69,7 @@ function createMap(earthquakes, mags) {
 
   // Create overlay object to hold our overlay layer
   let overlayMaps = {
-    Earthquakes: earthquakes,
-    Magnitudes: mags
+    Earthquakes: earthquakes
   };
 
   // Create our map, giving it the streetmap and earthquakes layers to display on load
@@ -92,7 +89,7 @@ function createMap(earthquakes, mags) {
 
 
 // Function that will determine the color the circles based on magnitude
-function chooseColor(magnitude) {
+function markerColor(magnitude) {
   switch (magnitude) {
   case magnitude > 5:
     return "red";
@@ -108,3 +105,8 @@ function chooseColor(magnitude) {
     return "black";
   }
 }
+
+//Create radius function
+function markerRadius(magnitude) {
+  return magnitude * 30000;
+};
