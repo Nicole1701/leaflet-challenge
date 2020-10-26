@@ -84,10 +84,10 @@ function createMap(earthquakes) {
 
   // Add a legend to the map
   // stackoverflow.com/questions/45518547/cant-get-leaflet-legend-to-display-properly
-var legend = L.control({ position: "bottomright" });
+let legend = L.control({ position: "bottomright" });
 
 legend.onAdd = function(){
-    var div = L.DomUtil.create("div","legend");
+  let div = L.DomUtil.create("div","legend");
     div.innerHTML = [
       "<i class='d06'></i><span>-9-10</span><br>",
       "<i class='d05'></i><span>11-30</span><br>",
