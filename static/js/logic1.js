@@ -1,5 +1,3 @@
-
-
 // Define url for API call
 let queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"
 
@@ -29,11 +27,11 @@ function createFeatures(earthquakeData) {
     pointToLayer: (feature, latlng) => {
       return new L.circle(latlng,
         {radius: markerRadius(feature.properties.mag),
-        fillColor: markerColor(feature.properties.mag),
-        fillOpacity: .5,
+        fillColor: markerColor(feature.geometry.coordinates[2]),
+        fillOpacity: .4,
         color: "black",
         stroke: true,
-        weight: .8
+        weight: .2
       });
     }
   });
@@ -85,28 +83,51 @@ function createMap(earthquakes) {
   L.control.layers(baseMaps, overlayMaps, {
     collapsed: false
   }).addTo(myMap);
+
+  // Create a legend
+// gis.stackexchange.com/questions/193161/add-legend-to-leaflet-map
+var legend = L.control({ position: "bottomright" });
+
+  // Add information to the legend
+  legend.onAdd = function(myMap) {
+    var div = L.DomUtil.create("div", "info legend");
+    var magRange = [0, 1, 2, 3, 4, 5];
+    var labels = ['<strong> Earthquake Magnitude </strong>'];
+ 
+    // Loop through the intervals and generate a label 
+    // with a colored circle for each interval
+    for (var i = 0; i < magRange.length; i++) {
+     labels.push(
+      '<i class="circle" style="background:' + markerColor(magRange[i]) + '"></i> ' +
+      magRange[i] + (magRange[i+1] ? '&ndash;' + magRange[i+1] : '+'));
+      }  //ends for loop
+      div.innerHTML = labels.join('<br>');
+      return div;
+
+  };  // ends legend.onAdd
 }
 
-
 // Function that will determine the color the circles based on magnitude
-function markerColor(magnitude) {
-  switch (magnitude) {
-  case magnitude > 5:
-    return "red";
-  case magnitude > 4:
-    return "orange";
-  case magnitude > 3:
-    return "yellow";
-  case magnitude > 2:
-    return "green";
-  case magnitude > 1:
-    return "purple";
-  default:
-    return "black";
-  }
+function markerColor(depth) {
+  if (depth > 90) {
+    return '#b30024'
+} else if (depth > 70) {
+    return '#e3191c'
+} else if (depth > 50) {
+    return '#fc4e29'
+} else if (depth > 30) {
+    return '#fd8d3c'
+} else if (depth > 10) {
+    return '#feb14c'
+} 
+else {
+    return '#fed976'
+}
 }
 
 //Create radius function
 function markerRadius(magnitude) {
-  return magnitude * 30000;
+  return magnitude * 20000;
 };
+
+
