@@ -1,6 +1,6 @@
 // Define url for API call
 let queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"
-let plateURL = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json"
+let tectonicPlatesURL = "data/PB2002_boundaries.json"
 
 // Grab the GeoJSON data
 d3.json(queryUrl).then(data => {
@@ -11,7 +11,7 @@ d3.json(queryUrl).then(data => {
 });
 
 
-function createFeatures(earthquakeData, tectonicPlate) {
+function createFeatures(earthquakeData) {
 
   // Define a function we want to run once for each feature in the features array
   // Give each feature a popup
@@ -38,7 +38,7 @@ function createFeatures(earthquakeData, tectonicPlate) {
   });
 
   // Send earthquakes layer to the createMap function
-  createMap(earthquakes, tectoniclate);
+  createMap(earthquakes);
 }
 
 function createMap(earthquakes) {
@@ -95,6 +95,9 @@ function createMap(earthquakes) {
     "Satellite Map" : satellitemap
   };
 
+  // Create a tectonic plate overlay
+  let tectonicPlates = new L.LayerGroup();
+
   // Create overlay object for earthquakes
   let overlayMaps = {
     "Earthquakes": earthquakes,
@@ -105,30 +108,40 @@ function createMap(earthquakes) {
   let myMap = L.map("map", {
     center: [15.5994, -28.6731],
     zoom: 3,
-    layers: [streetmap, earthquakes]
+    layers: [streetmap, earthquakes, tectonicPlates]
   });
+
+  // Add tectonic data
+  d3.json(tectonicPlatesURL, function(tectonicData) {
+    L.geoJson(tectonicData, {
+        color: "orange",
+        weight: 2
+    })
+    .addTo(tectonicPlates);
+});
+
 
   // Add the layer control to the map
   L.control.layers(baseMaps, overlayMaps, {
     collapsed: false
   }).addTo(myMap);
 
-  // Add a legend to the map
-  // stackoverflow.com/questions/45518547/cant-get-leaflet-legend-to-display-properly
+/*Legend specific*/
+//codepen.io/haakseth/pen/KQbjdO
 let legend = L.control({ position: "bottomright" });
 
-legend.onAdd = function(){
-    let div = L.DomUtil.create("div","legend");
-    div.innerHTML = [
-      "<i class='d06'></i><span>-9-10</span><br>",
-      "<i class='d05'></i><span>11-30</span><br>",
-      "<i class='d04'></i><span>31-50</span><br>",
-      "<i class='d03'></i><span>51-70</span><br>",
-      "<i class='d02'></i><span>71-90</span><br>",
-      "<i class='d01'></i><span>90+</span><br>"
-      ].join("");
-    return div;
-}
+legend.onAdd = function() {
+  var div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h4>Depth</h4>";
+  div.innerHTML += '<i style="background: #FEB24C"></i><span>-9-10</span><br>';
+  div.innerHTML += '<i style="background: #FD8D3C"></i><span>11-30</span><br>';
+  div.innerHTML += '<i style="background: #FC4E2A"></i><span>31-50</span><br>';
+  div.innerHTML += '<i style="background: #E31A1C"></i><span>51-70</span><br>';
+  div.innerHTML += '<i style="background: #BD0026"></i><span>71-90</span><br>';
+  div.innerHTML += '<i style="background: #800026"></i><span>91+</span><br>';
+  
+  return div;
+};
 legend.addTo(myMap); 
 
 }

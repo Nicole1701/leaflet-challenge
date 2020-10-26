@@ -82,23 +82,24 @@ function createMap(earthquakes) {
     collapsed: false
   }).addTo(myMap);
 
-  // Add a legend to the map
-  // stackoverflow.com/questions/45518547/cant-get-leaflet-legend-to-display-properly
+/*Legend specific*/
+//codepen.io/haakseth/pen/KQbjdO
 let legend = L.control({ position: "bottomright" });
 
-legend.onAdd = function(){
-  let div = L.DomUtil.create("div","legend");
-    div.innerHTML = [
-      "<i class='d06'></i><span>-9-10</span><br>",
-      "<i class='d05'></i><span>11-30</span><br>",
-      "<i class='d04'></i><span>31-50</span><br>",
-      "<i class='d03'></i><span>51-70</span><br>",
-      "<i class='d02'></i><span>71-90</span><br>",
-      "<i class='d01'></i><span>90+</span><br>"
-      ].join("");
-    return div;
-}
+legend.onAdd = function() {
+  let div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h4>Depth</h4>";
+  div.innerHTML += '<i style="background: #FEB24C"></i><span>-9-10</span><br>';
+  div.innerHTML += '<i style="background: #FD8D3C"></i><span>11-30</span><br>';
+  div.innerHTML += '<i style="background: #FC4E2A"></i><span>31-50</span><br>';
+  div.innerHTML += '<i style="background: #E31A1C"></i><span>51-70</span><br>';
+  div.innerHTML += '<i style="background: #BD0026"></i><span>71-90</span><br>';
+  div.innerHTML += '<i style="background: #800026"></i><span>91+</span><br>';
+  
+  return div;
+};
 legend.addTo(myMap); 
+
 
 }
 // Function to determine circle color based on depth
