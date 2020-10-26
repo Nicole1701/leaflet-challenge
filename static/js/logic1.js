@@ -12,7 +12,7 @@ d3.json(queryUrl).then(data => {
 function createFeatures(earthquakeData) {
 
   // Define a function we want to run once for each feature in the features array
-  // Give each feature a popup describing the place and time of the earthquake
+  // Give each feature a popup
   function onEachFeature(feature, layer) {
     layer.bindPopup("Magnitude: " + feature.properties.mag +
     "<br />Location: "+ feature.properties.place +
@@ -21,7 +21,6 @@ function createFeatures(earthquakeData) {
 
   // Create a GeoJSON layer containing the features array on the earthquakeData object
   // Run the onEachFeature function once for each piece of data in the array
-
   let earthquakes = L.geoJSON(earthquakeData, {
     onEachFeature: onEachFeature,
     pointToLayer: (feature, latlng) => {
@@ -36,13 +35,13 @@ function createFeatures(earthquakeData) {
     }
   });
 
-  // Sending our earthquakes layer to the createMap function
+  // Send earthquakes layer to the createMap function
   createMap(earthquakes);
 }
 
 function createMap(earthquakes) {
 
-  // Define streetmap and darkmap layers
+  // Create streetmap layer
   let streetmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
     tileSize: 512,
@@ -52,6 +51,7 @@ function createMap(earthquakes) {
     accessToken: API_KEY
   });
 
+  // Create dark map layer
   let darkmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
     maxZoom: 18,
@@ -59,18 +59,18 @@ function createMap(earthquakes) {
     accessToken: API_KEY
   });
 
-  // Define a baseMaps object to hold our base layers
+  // Define a baseMaps object to hold base layers
   let baseMaps = {
     "Street Map": streetmap,
     "Dark Map": darkmap
   };
 
-  // Create overlay object to hold our overlay layer
+  // Create overlay object for earthquakes
   let overlayMaps = {
     Earthquakes: earthquakes
   };
 
-  // Create our map, giving it the streetmap and earthquakes layers to display on load
+  // Create map with streetmap and earthquakes layers
   let myMap = L.map("map", {
     center: [15.5994, -28.6731],
     zoom: 3,
@@ -89,19 +89,19 @@ var legend = L.control({ position: "bottomright" });
 legend.onAdd = function(){
     var div = L.DomUtil.create("div","legend");
     div.innerHTML = [
-      "<i class='d01'; ></i><span>-9-10</span><br>",
-      "<i class='d02' style = 'height=25px';></i><span>11-30</span><br>",
-      "<i class='d03' style = 'height=25px';></i><span>31-50</span><br>",
-      "<i class='d04' style = 'height=25px';></i><span>51-70</span><br>",
-      "<i class='d05' style = 'height=25px';></i><span>71-90</span><br>",
-      "<i class='d06' style = 'height=25px';></i><span>90+</span><br>"
+      "<i class='d06'></i><span>-9-10</span><br>",
+      "<i class='d05'></i><span>11-30</span><br>",
+      "<i class='d04'></i><span>31-50</span><br>",
+      "<i class='d03'></i><span>51-70</span><br>",
+      "<i class='d02'></i><span>71-90</span><br>",
+      "<i class='d01'></i><span>90+</span><br>"
       ].join("");
     return div;
 }
 legend.addTo(myMap); 
 
 }
-// Function that will determine the color the circles based on depth
+// Function to determine circle color based on depth
 function markerColor(depth) {
   if (depth > 90) {
       return '#800026'
@@ -119,7 +119,7 @@ function markerColor(depth) {
       return 'magenta'
   }
 };
-// Function that will determine radius based on magnitutde
+// Function to determine radius based on magnitutde
 function markerRadius(magnitude) {
   return magnitude * 20000;
 };
