@@ -1,5 +1,6 @@
 // Define url for API call
 let queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"
+let plateURL = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json"
 
 // Grab the GeoJSON data
 d3.json(queryUrl).then(data => {
@@ -9,7 +10,8 @@ d3.json(queryUrl).then(data => {
   createFeatures(data.features);
 });
 
-function createFeatures(earthquakeData) {
+
+function createFeatures(earthquakeData, tectonicPlate) {
 
   // Define a function we want to run once for each feature in the features array
   // Give each feature a popup
@@ -36,7 +38,7 @@ function createFeatures(earthquakeData) {
   });
 
   // Send earthquakes layer to the createMap function
-  createMap(earthquakes);
+  createMap(earthquakes, tectoniclate);
 }
 
 function createMap(earthquakes) {
@@ -74,6 +76,14 @@ function createMap(earthquakes) {
         id: "outdoors-v11",
         accessToken: API_KEY
       });
+
+    // Create satellite map layer
+     let satellitemap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+        attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+        maxZoom: 18,
+        id: "satellite-v9",
+        accessToken: API_KEY
+      });
    
 
   // Define a baseMaps object to hold base layers
@@ -81,12 +91,14 @@ function createMap(earthquakes) {
     "Street Map": streetmap,
     "Dark Map": darkmap,
     "Light Map": lightmap,
-    "Outdoors Map": outdoorsmap
+    "Outdoors Map": outdoorsmap,
+    "Satellite Map" : satellitemap
   };
 
   // Create overlay object for earthquakes
   let overlayMaps = {
-    Earthquakes: earthquakes
+    "Earthquakes": earthquakes,
+    "Tectonic Plates": tectonicPlates
   };
 
   // Create map with streetmap and earthquakes layers
