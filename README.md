@@ -6,8 +6,8 @@
 
 - Once you have cloned the repository, you will need to get an API Key from [Mapbox](https://account.mapbox.com/): - Edit the configEDIT.js file here: [configEDIT.js](./leaflet-challenge/static/js/configEDIT.js) - Insert your API key - Save the file as config.js in the js folder
 - Once the config.js file contains your API Key, you can then use use a live server to view the pages.
-- Main assignment can be found here: [Level 1](./leaflet-challenge/index1.html)
-- Bonus assignment can be found here: [Earthquake Site with Tectonic Plates](./leaflet-challenge/index2.html)
+- Main assignment can be found here: [Earthquake Site](/leaflet-challenge/index1.html)
+- Bonus assignment can be found here: [Earthquake Site with Tectonic Plates](/leaflet-challenge/index2.html)
 
 ## Background
 
