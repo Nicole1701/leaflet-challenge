@@ -4,10 +4,12 @@
 
 ## Before you Begin
 
-- Once you have cloned the repository, you will need to get an API Key from [Mapbox](https://account.mapbox.com/): - Edit the configEDIT.js file here: [configEDIT.js](./leaflet-challenge/static/js/configEDIT.js) - Insert your API key - Save the file as config.js in the js folder
-- Once the config.js file contains your API Key, you can then use use a live server to view the pages.
-- Main assignment can be found here: [Earthquake Site](/index1.html)
-- Bonus assignment can be found here: [Earthquake Site with Tectonic Plates](/index2.html)
+- Once you have cloned the repository, you will need to get an API Key from [Mapbox](https://account.mapbox.com/): - Edit the configEDIT.js file here: [configEDIT.js](./leaflet-challenge/static/js/configEDIT.js)
+  - Insert your API key
+  - Save the file as config.js in the js folder
+  - Once the config.js file contains your API Key, you can then use use a live server to view the pages.
+- Main assignment can be found in the [index1.html](/index1.html) file.
+- Bonus assignment can be found in the [index2.html](/index2.html) file.
 
 ## Background
 
@@ -50,7 +52,7 @@ In this step we are going to..
 - Add layer controls to our map.
 <hr>
 
-## Screenshot of Final Pages
+## Screenshots of Final Pages
 
 ### Level 1 Page
 
