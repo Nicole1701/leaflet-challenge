@@ -50,7 +50,7 @@ In this step we are going to..
 - Add layer controls to our map.
 <hr>
 
-## Screenshot of Final Page
+## Screenshot of Final Pages
 
 ### Level 1 Page
 
