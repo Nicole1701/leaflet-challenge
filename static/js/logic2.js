@@ -9,18 +9,20 @@ d3.json(queryUrl).then(data => {
   createFeatures(data.features);
 });
 
+
+////////////Create Features Function////////////
+
 function createFeatures(earthquakeData) {
 
-  // Define a function we want to run once for each feature in the features array
-  // Give each feature a popup
+// Define a function for each feature in the features array and create popup
   function onEachFeature(feature, layer) {
     layer.bindPopup("Magnitude: " + feature.properties.mag +
     "<br />Location: "+ feature.properties.place +
     "<br />Depth: " + feature.geometry.coordinates[2] + "</p>");
   }
 
-  // Create a GeoJSON layer containing the features array on the earthquakeData object
-  // Run the onEachFeature function once for each piece of data in the array
+  // Create GeoJSON layer containing earthquakeData object
+  // Run the onEachFeature function
   let earthquakes = L.geoJSON(earthquakeData, {
     onEachFeature: onEachFeature,
     pointToLayer: (feature, latlng) => {
@@ -39,7 +41,7 @@ function createFeatures(earthquakeData) {
   createMap(earthquakes);
 }
 
-// Create layer for tectonic plates
+////////////Create Tectonic Plate Layer////////////
 let tectonicPlates = new L.LayerGroup();
 
 // Pull in the data 
@@ -54,26 +56,27 @@ d3.json("static/data/PB2002_boundaries.json").then(function(platedata) {
     //Then add the tectonicplates layer to the map.
     tectonicPlates.addTo(myMap);
 });
-  
+
+////////////Create createMap Function////////////
 function createMap(earthquakes) {
 
-  // Create streetmap layer
-  let streetmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
-    attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
-    tileSize: 512,
-    maxZoom: 18,
-    zoomOffset: -1,
-    id: "mapbox/streets-v11",
-    accessToken: API_KEY
-  });
+    // Create streetmap layer
+     let streetmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+        attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
+        tileSize: 512,
+        maxZoom: 18,
+        zoomOffset: -1,
+        id: "mapbox/streets-v11",
+        accessToken: API_KEY
+     });
 
-  // Create dark map layer
-  let darkmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
-    attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-    maxZoom: 18,
-    id: "dark-v10",
-    accessToken: API_KEY
-  });
+    // Create dark map layer
+    let darkmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+        attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+        maxZoom: 18,
+        id: "dark-v10",
+        accessToken: API_KEY
+    });
 
     // Create light map layer
     let lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
@@ -81,7 +84,7 @@ function createMap(earthquakes) {
         maxZoom: 18,
         id: "light-v10",
         accessToken: API_KEY
-      });
+    });
 
      // Create outdoors map layer
      let outdoorsmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
@@ -89,7 +92,7 @@ function createMap(earthquakes) {
         maxZoom: 18,
         id: "outdoors-v11",
         accessToken: API_KEY
-      });
+    });
 
     // Create satellite map layer
      let satellitemap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
@@ -97,10 +100,8 @@ function createMap(earthquakes) {
         maxZoom: 18,
         id: "satellite-v9",
         accessToken: API_KEY
-      });
+    });
    
-
-
   // Define a baseMaps object to hold base layers
   let baseMaps = {
     "Street Map": streetmap,
@@ -116,7 +117,7 @@ function createMap(earthquakes) {
     "Tectonic Plates": tectonicPlates
   };
 
-  // Create map with streetmap and earthquakes layers
+  // Create map with streetmap, earthquakes and tectonicPlate layers
   let myMap = L.map("map", {
     center: [15.5994, -28.6731],
     zoom: 3,
@@ -128,7 +129,7 @@ function createMap(earthquakes) {
     collapsed: false
   }).addTo(myMap);
 
-/*Legend specific*/
+////////////Create Legend ////////////
 //codepen.io/haakseth/pen/KQbjdO
 let legend = L.control({ position: "bottomright" });
 
@@ -147,7 +148,7 @@ legend.onAdd = function() {
 legend.addTo(myMap); 
 
 }
-// Function to determine circle color based on depth
+////////////Create Circle Color Function ////////////
 function markerColor(depth) {
   if (depth > 90) {
       return '#800026'
@@ -165,7 +166,8 @@ function markerColor(depth) {
       return 'magenta'
   }
 };
-// Function to determine radius based on magnitutde
+
+////////////Create Circle Radius Function ////////////
 function markerRadius(magnitude) {
   return magnitude * 20000;
 };

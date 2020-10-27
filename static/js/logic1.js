@@ -9,18 +9,20 @@ d3.json(queryUrl).then(data => {
   createFeatures(data.features);
 });
 
+
+////////////Create Features Function////////////
+
 function createFeatures(earthquakeData) {
 
-  // Define a function we want to run once for each feature in the features array
-  // Give each feature a popup
+  // Define a function for each feature in the features array and create popup
   function onEachFeature(feature, layer) {
     layer.bindPopup("Magnitude: " + feature.properties.mag +
     "<br />Location: "+ feature.properties.place +
     "<br />Depth: " + feature.geometry.coordinates[2] + "</p>");
   }
 
-  // Create a GeoJSON layer containing the features array on the earthquakeData object
-  // Run the onEachFeature function once for each piece of data in the array
+  // Create GeoJSON layer containing earthquakeData object
+  // Run the onEachFeature function
   let earthquakes = L.geoJSON(earthquakeData, {
     onEachFeature: onEachFeature,
     pointToLayer: (feature, latlng) => {
@@ -39,6 +41,7 @@ function createFeatures(earthquakeData) {
   createMap(earthquakes);
 }
 
+////////////Create createMap Function////////////
 function createMap(earthquakes) {
 
   // Create streetmap layer
@@ -82,7 +85,7 @@ function createMap(earthquakes) {
     collapsed: false
   }).addTo(myMap);
 
-/*Legend specific*/
+////////////Create Legend ////////////
 //codepen.io/haakseth/pen/KQbjdO
 let legend = L.control({ position: "bottomright" });
 
@@ -100,9 +103,8 @@ legend.onAdd = function() {
 };
 legend.addTo(myMap); 
 
-
 }
-// Function to determine circle color based on depth
+////////////Create Circle Color Function ////////////
 function markerColor(depth) {
   if (depth > 90) {
       return '#800026'
@@ -120,7 +122,8 @@ function markerColor(depth) {
       return 'magenta'
   }
 };
-// Function to determine radius based on magnitutde
+
+////////////Create Circle Radius Function ////////////
 function markerRadius(magnitude) {
   return magnitude * 20000;
 };
