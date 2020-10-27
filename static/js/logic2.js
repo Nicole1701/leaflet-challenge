@@ -1,15 +1,13 @@
 // Define url for API call
 let queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"
-let tectonicPlatesURL = "data/PB2002_boundaries.json"
 
 // Grab the GeoJSON data
 d3.json(queryUrl).then(data => {
   console.log(data);
-  
+
   // Send the data.features object to the createFeatures function
   createFeatures(data.features);
 });
-
 
 function createFeatures(earthquakeData) {
 
@@ -37,10 +35,26 @@ function createFeatures(earthquakeData) {
     }
   });
 
-  // Send earthquakes layer to the createMap function
+ // Send earthquakes layer to the createMap function
   createMap(earthquakes);
 }
 
+// Create layer for tectonic plates
+let tectonicPlates = new L.LayerGroup();
+
+// Pull in the data 
+d3.json("static/data/PB2002_boundaries.json").then(function(platedata) {
+        
+    // Add the data to the tectonicplates layer
+    L.geoJson(platedata, {
+        color: "orange", 
+        weight: 2}
+        ).addTo(tectonicPlates);
+
+    //Then add the tectonicplates layer to the map.
+    tectonicPlates.addTo(myMap);
+});
+  
 function createMap(earthquakes) {
 
   // Create streetmap layer
@@ -86,6 +100,7 @@ function createMap(earthquakes) {
       });
    
 
+
   // Define a baseMaps object to hold base layers
   let baseMaps = {
     "Street Map": streetmap,
@@ -94,9 +109,6 @@ function createMap(earthquakes) {
     "Outdoors Map": outdoorsmap,
     "Satellite Map" : satellitemap
   };
-
-  // Create a tectonic plate overlay
-  let tectonicPlates = new L.LayerGroup();
 
   // Create overlay object for earthquakes
   let overlayMaps = {
@@ -111,17 +123,7 @@ function createMap(earthquakes) {
     layers: [streetmap, earthquakes, tectonicPlates]
   });
 
-  // Add tectonic data
-  d3.json(tectonicPlatesURL, function(tectonicData) {
-    L.geoJson(tectonicData, {
-        color: "orange",
-        weight: 2
-    })
-    .addTo(tectonicPlates);
-});
-
-
-  // Add the layer control to the map
+   // Add the layer control to the map
   L.control.layers(baseMaps, overlayMaps, {
     collapsed: false
   }).addTo(myMap);
